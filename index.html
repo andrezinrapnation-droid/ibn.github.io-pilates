@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilates IBN</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
+        .login-container { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; text-align: center; margin: 2rem auto; }
+        .logo { font-size: 2.5rem; color: #667eea; margin-bottom: 1rem; font-weight: bold; }
+        .subtitle { color: #666; margin-bottom: 2rem; font-size: 1.1rem; }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: bold; }
+        .form-group input { width: 100%; padding: 0.8rem; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #667eea; }
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.8rem 2rem; border: none; border-radius: 10px; font-size: 1rem; cursor: pointer; transition: transform 0.3s; width: 100%; }
+        .btn:hover { transform: translateY(-2px); }
+        .create-account { margin-top: 1rem; color: #666; }
+        .create-account a { color: #667eea; text-decoration: none; font-weight: bold; }
+        .create-account a:hover { text-decoration: underline; }
+        
+        /* Estilos da página de novidades */
+        .novidades-page { display: none; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { color: white; font-size: 3rem; margin-bottom: 1rem; }
+        .header p { color: white; font-size: 1.2rem; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: transform 0.3s; cursor: pointer; }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { color: #667eea; margin-bottom: 1rem; font-size: 1.5rem; }
+        .card p { color: #666; line-height: 1.6; }
+        .admin-btn { position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem; }
+        .admin-btn:hover { background: #218838; }
+        
+        /* Estilos do painel admin */
+        .admin-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; }
+        .admin-content { background: white; margin: 2rem auto; padding: 2rem; border-radius: 10px; max-width: 800px; max-height: 80vh; overflow-y: auto; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .admin-header h2 { color: #333; }
+        .close-btn { background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center; }
+        .stat-card h3 { color: #667eea; font-size: 2rem; margin-bottom: 0.5rem; }
+        .stat-card p { color: #666; margin: 0; }
+        .logins-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .logins-table th, .logins-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #ddd; }
+        .logins-table th { background: #f8f9fa; font-weight: bold; color: #333; }
+        .logins-table tr:hover { background: #f5f5f5; }
+        
+        /* Estilos da página de benefícios */
+        .beneficios-page { display: none; padding: 2rem; max-width: 800px; margin: 0 auto; }
+        .beneficios-content { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+        .beneficios-content h2 { color: #667eea; margin-bottom: 2rem; text-align: center; font-size: 2.5rem; }
+        .beneficios-content h3 { color: #333; margin: 2rem 0 1rem 0; font-size: 1.5rem; }
+        .beneficios-content ul { margin: 1rem 0; padding-left: 2rem; }
+        .beneficios-content li { margin: 0.5rem 0; line-height: 1.6; }
+        .back-btn { background: #667eea; color: white; padding: 0.8rem 2rem; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; margin-top: 2rem; }
+        .back-btn:hover { background: #5a6fd8; }
+        
+        /* Estilos para upload de fotos */
+        .photo-upload { margin-top: 1rem; }
+        .photo-upload input[type="file"] { display: none; }
+        .photo-upload label { background: #667eea; color: white; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer; display: inline-block; transition: background 0.3s; }
+        .photo-upload label:hover { background: #5a6fd8; }
+        .photo-preview { margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+        .photo-preview img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 2px solid #e1e5e9; }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .cards { grid-template-columns: 1fr; }
+            .admin-content { margin: 1rem; padding: 1rem; }
+            .stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de Login -->
+    <div id="loginPage" class="login-container">
+        <div class="logo">🧘‍♀️ Pilates IBN</div>
+        <p class="subtitle">Bem-vindo ao nosso studio!</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+        
+        <p class="create-account">
+            Não tem conta? <a href="#" onclick="alert('Entre em contato conosco para criar sua conta!')">Crie uma conta</a>
+        </p>
+    </div>
+
+    <!-- Página de Novidades -->
+    <div id="novidadesPage" class="novidades-page">
+        <div class="header">
+            <h1>🧘‍♀️ Pilates IBN</h1>
+            <p>Novidades e informações do nosso studio</p>
+        </div>
+        
+        <div class="cards">
+            <div class="card" onclick="showBeneficios()">
+                <h3>🌟 O que o Pilates faz na nossa vida</h3>
+                <p>Descubra todos os benefícios físicos, mentais e sociais que o Pilates pode trazer para sua vida.</p>
+            </div>
+            
+            <div class="card">
+                <h3>   Horários Atualizados</h3>
+                <p>Segunda a Sexta: 6h às 22h<br>Sábado: 8h às 18h<br>Domingo: 9h às 17h</p>
+                <div class="photo-upload">
+                    <input type="file" id="photoInput" accept="image/*" multiple>
+                    <label for="photoInput">📷 Adicione fotos do Pilates</label>
+                    <div class="photo-preview" id="photoPreview"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>💪 Nova Aula: Pilates no Solo</h3>
+                <p>Experimente nossa nova modalidade de Pilates no solo, perfeita para iniciantes e avançados.</p>
+            </div>
+            
+            <div class="card">
+                <h3>   Promoção Especial</h3>
+                <p>50% de desconto na primeira mensalidade para novos alunos. Válido até o final do mês!</p>
+            </div>
+        </div>
+        
+        <button class="admin-btn" onclick="showAdmin()">Admin</button>
+    </div>
+
+    <!-- Página de Benefícios -->
+    <div id="beneficiosPage" class="beneficios-page">
+        <div class="beneficios-content">
+            <h2>🌟 O que o Pilates faz na nossa vida</h2>
+            
+            <h3>   Benefícios físicos</h3>
+            <ul>
+                <li><strong>Fortalecimento muscular:</strong> Trabalha os músculos profundos, especialmente do core (abdômen, lombar e pelve).</li>
+                <li><strong>Melhora da postura:</strong> Corrige desalinhamentos e ajuda a manter uma postura mais ereta e saudável.</li>
+                <li><strong>Aumento da flexibilidade:</strong> Os exercícios alongam e fortalecem ao mesmo tempo.</li>
+                <li><strong>Alívio de dores:</strong> Muito eficaz para dores nas costas, pescoço e articulações.</li>
+                <li><strong>Melhora da respiração:</strong> Ensina a respirar de forma consciente e eficiente.</li>
+                <li><strong>Equilíbrio e coordenação:</strong> Desenvolve controle corporal e consciência dos movimentos.</li>
+            </ul>
+            
+            <h3>🧠 Benefícios mentais e emocionais</h3>
+            <ul>
+                <li><strong>Redução do estresse:</strong> A prática focada e controlada ajuda a acalmar a mente.</li>
+                <li><strong>Mais concentração:</strong> Exige atenção plena nos movimentos e na respiração.</li>
+                <li><strong>Sensação de bem-estar:</strong> Libera endorfinas e promove uma conexão positiva com o corpo.</li>
+            </ul>
+            
+            <h3>👥 Benefícios sociais e funcionais</h3>
+            <ul>
+                <li><strong>Pode ser feito por qualquer idade:</strong> Desde jovens até idosos, com adaptações seguras.</li>
+                <li><strong>Complementa outras atividades:</strong> Ótimo para quem corre, dança, joga futebol ou faz musculação.</li>
+                <li><strong>Prevenção de lesões:</strong> Fortalece músculos estabilizadores e melhora a mobilidade.</li>
+            </ul>
+            
+            <button class="back-btn" onclick="showNovidades()">← Voltar para Novidades</button>
+        </div>
+    </div>
+
+    <!-- Painel Admin -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>🔧 Painel Administrativo</h2>
+                <button class="close-btn" onclick="hideAdmin()">✕ Fechar</button>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <h3 id="totalLogins">0</h3>
+                    <p>Total de Logins</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="uniqueUsers">0</h3>
+                    <p>Usuários Únicos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="todayLogins">0</h3>
+                    <p>Logins Hoje</p>
+                </div>
+            </div>
+            
+            <h3>📊 Histórico de Logins</h3>
+            <table class="logins-table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Senha</th>
+                        <th>Data/Hora</th>
+                    </tr>
+                </thead>
+                <tbody id="loginsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Banco de dados local
+        let logins = JSON.parse(localStorage.getItem('pilatesLogins')) || [];
+        
+        // Função de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Salvar login
+            const loginData = {
+                email: email,
+                password: password,
+                timestamp: new Date().toLocaleString('pt-BR')
+            };
+            
+            logins.push(loginData);
+            localStorage.setItem('pilatesLogins', JSON.stringify(logins));
+            
+            // Mostrar página de novidades
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('novidadesPage').style.display = 'block';
+        });
+        
+        // Função para mostrar benefícios
+        function showBeneficios() {
+            document.getElementById('novidadesPage').style.display = 'none';
+            document.getElementById('beneficiosPage').style.display = 'block';
+        }
+        
+        // Função para voltar às novidades
+        function showNovidades() {
+            document.getElementById('beneficiosPage').style.display = 'none';
+            document.getElementById('novidadesPage').style.display = 'block';
+        }
+        
+        // Função para mostrar admin
+        function showAdmin() {
+            updateAdminStats();
+            document.getElementById('adminPanel').style.display = 'block';
+        }
+        
+        // Função para esconder admin
+        function hideAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+        
+        // Atualizar estatísticas do admin
+        function updateAdminStats() {
+            const totalLogins = logins.length;
+            const uniqueUsers = new Set(logins.map(login => login.email)).size;
+            const today = new Date().toDateString();
+            const todayLogins = logins.filter(login => new Date(login.timestamp).toDateString() === today).length;
+            
+            document.getElementById('totalLogins').textContent = totalLogins;
+            document.getElementById('uniqueUsers').textContent = uniqueUsers;
+            document.getElementById('todayLogins').textContent = todayLogins;
+            
+            // Atualizar tabela
+            const tbody = document.getElementById('loginsTableBody');
+            tbody.innerHTML = '';
+            
+            logins.reverse().forEach(login => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = login.email;
+                row.insertCell(1).textContent = login.password;
+                row.insertCell(2).textContent = login.timestamp;
+            });
+        }
+        
+        // Upload de fotos
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const preview = document.getElementById('photoPreview');
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        preview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
