@@ -166,7 +166,7 @@
         <!-- Painel de Alunos de Segunda -->
         <div id="alunosSegunda" class="alunos-panel active">
             <div class="alunos-header">
-                <h3>�� Alunos de Segunda-feira (16:15 - 19:15)</h3>
+                <h3> Alunos de Segunda-feira (16:15 - 19:15)</h3>
                 <button class="add-aluno-btn" onclick="addAluno('segunda')">+ Adicionar Aluno</button>
             </div>
             <table class="alunos-table">
@@ -175,7 +175,7 @@
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Telefone</th>
-                        <th>Observações</th>
+                        <th>Pagamento</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -196,7 +196,7 @@
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Telefone</th>
-                        <th>Observações</th>
+                        <th>Pagamento</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -359,14 +359,14 @@
             if (!email) return;
             
             const telefone = prompt('Telefone do aluno:');
-            const observacoes = prompt('Observações (opcional):') || '';
+            const pagamento = prompt('Status do pagamento (ex: Pago, Pendente, Atrasado):') || 'Pendente';
             
             const aluno = {
                 id: Date.now(),
                 nome: nome,
                 email: email,
                 telefone: telefone || '',
-                observacoes: observacoes
+                pagamento: pagamento
             };
             
             if (dia === 'segunda') {
@@ -397,7 +397,7 @@
                     <td><input type="text" value="${aluno.nome}" onchange="updateAluno('${dia}', ${aluno.id}, 'nome', this.value)"></td>
                     <td><input type="email" value="${aluno.email}" onchange="updateAluno('${dia}', ${aluno.id}, 'email', this.value)"></td>
                     <td><input type="text" value="${aluno.telefone}" onchange="updateAluno('${dia}', ${aluno.id}, 'telefone', this.value)"></td>
-                    <td><input type="text" value="${aluno.observacoes}" onchange="updateAluno('${dia}', ${aluno.id}, 'observacoes', this.value)"></td>
+                    <td><input type="text" value="${aluno.pagamento}" onchange="updateAluno('${dia}', ${aluno.id}, 'pagamento', this.value)"></td>
                     <td><button class="delete-btn" onclick="deleteAluno('${dia}', ${aluno.id})">Excluir</button></td>
                 `;
             });
